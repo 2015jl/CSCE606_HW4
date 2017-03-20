@@ -31,6 +31,16 @@ module WithinHelpers
 end
 World(WithinHelpers)
 
+Given(/^the following movies exist:$/) do |table|
+    table.hashes.each do |hash|
+       Movie.create!(title: hash['title'], rating: hash['rating'], release_date: hash['release_date'], director: hash['director'])
+    end
+end
+
+Then(/^the director of "([^"]*)" should be "([^"]*)"$/) do |movie, director|
+    expect(Movie.find_by_title(movie).director) == director
+end
+
 # Single-line step scoper
 When /^(.*) within (.*[^:])$/ do |step, parent|
   with_scope(parent) { When step }
